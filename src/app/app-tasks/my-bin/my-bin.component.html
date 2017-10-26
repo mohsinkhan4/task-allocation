@@ -1,0 +1,150 @@
+<div class="table-responsive">  
+  <table class="table table-bordered table-hover">
+    <thead> 
+      <tr> 
+        <th>#</th>
+        <th>Process ID</th>
+        <th>Process Name</th>
+        <th>Severity</th>
+        <th>OPS Step</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of taskData">
+        <td><a class="btn btn-info" (click)="onExpand(task.taskId)">+</a></td>
+        <td>{{ task.processId }}</td>
+        <td>{{ task.processName }}</td>
+        <td>{{ task.severityName }}</td>
+        <td>{{ task.opsStep | uppercase }}</td>
+        <td>{{ task.status }}</td>
+        <td>
+            <a 
+            class="btn btn-info" 
+            (click)="onRelease(task.taskId)"
+            *ngIf="(userData.securityGroup === 'dev' && task.status !== 'bvd') || userData.securityGroup === 'ops'">
+            Release</a>
+          <a 
+            class="btn btn-info" 
+            (click)="onMoveToOps(task.taskId)"
+            *ngIf="(userData.securityGroup === 'dev' && task.status !== 'bvd' && task.opsStep === 'true')">
+            Move to OPS</a>
+          <a 
+            class="btn btn-info" 
+            (click)="onSendBackToDeveloper(task.taskId)"
+            *ngIf="(userData.securityGroup === 'ops') || (userData.securityGroup === 'int')">
+            Send Back to Developer</a>
+          <a
+            class="btn btn-info" 
+            (click)="onSendForValidation(task.taskId)"
+            *ngIf="(userData.securityGroup === 'dev' && task.status !== 'bvd') || userData.securityGroup === 'ops'">
+            Send for Validation</a>
+          <a 
+            class="btn btn-info" 
+            (click)="onSendForExternalValidation(task.taskId)"
+            *ngIf="userData.securityGroup === 'int'" >
+            Send for External Validation</a>
+          <a 
+            class="btn btn-info" 
+            (click)="onSendBackToInternalValidation(task.taskId)"
+            *ngIf="userData.securityGroup === 'ext'" >
+            Send back to Internal Validation</a>
+          <a 
+            class="btn btn-info" 
+            (click)="onValidatedSuccessfully(task.taskId)"
+            *ngIf="userData.securityGroup === 'ext'">
+            Validated Successfully</a>
+          <a 
+            class="btn btn-info" 
+            (click)="onComplete(task.taskId)"
+            *ngIf="(userData.securityGroup === 'dev' && task.status === 'bvd')">
+            Complete</a>
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
+</div>
+  
+<!-- <div class="row"> 
+  <div class="col-md-1">#</div>
+  <div class="col-md-1">Process ID</div>
+  <div class="col-md-2">Process Name</div>
+  <div class="col-md-2">Severity</div>
+  <div class="col-md-2">OPS Step</div>
+  <div class="col-md-2">Status</div>
+  <div class="col-md-2">Action</div>
+</div>
+<div *ngFor="let task of taskData">
+  <div class="row" >
+    <div class="col-md-1"><a class="btn btn-info" (click)="onToggleDetails(task.taskId)">+</a></div>
+    <div class="col-md-1">{{ task.processId }}</div>
+    <div class="col-md-2">{{ task.processName }}</div>
+    <div class="col-md-2">{{ task.severityName }}</div>
+    <div class="col-md-2">{{ task.opsStep | uppercase }}</div>
+    <div class="col-md-2">{{ task.status }}</div>
+    <div class="col-md-2">
+      <a 
+        class="btn btn-info" 
+        (click)="onRelease(task.taskId)"
+        *ngIf="(userData.securityGroup === 'dev' && task.status !== 'bvd') || userData.securityGroup === 'ops'">
+        Release</a>
+      <a 
+        class="btn btn-info" 
+        (click)="onMoveToOps(task.taskId)"
+        *ngIf="(userData.securityGroup === 'dev' && task.status !== 'bvd' && task.opsStep)">
+        Move to OPS</a>
+      <a
+        class="btn btn-info" 
+        (click)="onSendForValidation(task.taskId)"
+        *ngIf="(userData.securityGroup === 'dev' && task.status !== 'bvd') || userData.securityGroup === 'ops'">
+        Send for Validation</a>
+      <a 
+        class="btn btn-info" 
+        (click)="onSendBackToDeveloper(task.taskId)"
+        *ngIf="(userData.securityGroup === 'ops') || (userData.securityGroup === 'int')">
+        Send Back to Developer</a>
+      <a 
+        class="btn btn-info" 
+        (click)="onSendBackToInternalValidation(task.taskId)"
+        *ngIf="userData.securityGroup === 'ext'" >
+        Send back to Internal Validation</a>
+      <a 
+        class="btn btn-info" 
+        (click)="onSendForExternalValidation(task.taskId)"
+        *ngIf="userData.securityGroup === 'int'" >
+        Send for External Validation</a>
+      <a 
+        class="btn btn-info" 
+        (click)="onValidatedSuccessfully(task.taskId)"
+        *ngIf="userData.securityGroup === 'ext'">
+        Validated Successfully</a>
+      <a 
+        class="btn btn-info" 
+        (click)="onComplete(task.taskId)"
+        *ngIf="(userData.securityGroup === 'dev' && task.status === 'bvd')">
+        Complete</a>
+    </div>
+  </div> -->
+
+  <!-- <div>
+    <table *ngIf="!!task.showDetails" class="table table-bordered table-hover" >
+    <thead> 
+      <tr> 
+        <th>BAN</th>
+        <th>SERVICE_NAME</th>
+        <th>STATE_ID</th>
+        <th>STATE_MESSAGE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let taskDetail of taskDetails">
+        <td>{{ taskDetail.ban }}</td>
+        <td>{{ taskDetail.serviceName }}</td>
+        <td>{{ taskDetail.state_id }}</td>
+        <td>{{ taskDetail.state_message }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->

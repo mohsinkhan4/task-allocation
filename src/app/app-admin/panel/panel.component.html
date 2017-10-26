@@ -1,0 +1,31 @@
+<h3>Administration Panel</h3>
+<div class="pull-right">
+  <button (click)="onSave()" class="btn btn-info">Save</button>
+</div>
+<br><br>
+<div class="table-responsive">  
+  <table class="table table-bordered table-hover">
+    <thead> 
+      <tr> 
+        <th>User Name</th>
+        <th>Developer</th>
+        <th>OPS</th>
+        <th>Internal Validation</th>
+        <th>External Validation</th>
+        <th>Lead</th>
+        <th>Manager</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of userData">
+        <td>{{ user.firstname }}</td>
+        <td><input type="radio" name="{{ user.username }}" [checked]="user.securityGroup === 'dev'" (click)="onClick(user.userId, 'dev')" /></td>
+        <td><input type="radio" name="{{ user.username }}" [checked]="user.securityGroup === 'ops'" (click)="onClick(user.userId, 'ops')" /></td>
+        <td><input type="radio" name="{{ user.username }}" [checked]="user.securityGroup === 'int'" (click)="onClick(user.userId, 'int')" /></td>
+        <td><input type="radio" name="{{ user.username }}" [checked]="user.securityGroup === 'ext'" (click)="onClick(user.userId, 'ext')" /></td>
+        <td><input type="radio" name="{{ user.username }}" [checked]="user.securityGroup === 'led'" (click)="onClick(user.userId, 'led')" /></td>
+        <td><input type="radio" name="{{ user.username }}" [checked]="user.securityGroup === 'mgr'" (click)="onClick(user.userId, 'mgr')" /></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
