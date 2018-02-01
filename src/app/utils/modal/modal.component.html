@@ -1,0 +1,21 @@
+<!-- <button class="btn btn-primary pull-right" [mat-dialog-close]="true">x</button> -->
+<div class="table-responsive">  
+    <table class="table table-bordered table-hover">
+      <thead> 
+        <tr> 
+          <th>BAN</th>
+          <th>Service Name</th>
+          <th>State Id</th>
+          <th>State Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of data.taskData">
+          <td>{{ task.ban }}</td>
+          <td>{{ task.serviceName }}</td>
+          <td>{{ task.state_id }}</td>
+          <td>{{ task.state_message }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

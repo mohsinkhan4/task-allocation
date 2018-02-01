@@ -1,0 +1,23 @@
+<div class="table-responsive">  
+  <table class="table table-bordered table-hover">
+    <thead> 
+      <tr> 
+        <th>Process ID</th>
+        <th>Process Name</th>
+        <th>Severity</th>
+        <th>OPS Step</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of taskData">
+        <td>{{ task.processId }}</td>
+        <td>{{ task.processName }}</td>
+        <td>{{ task.severityName }}</td>
+        <td>{{ '' + task.opsStepFlag | uppercase }}</td>
+        <td><a class="btn btn-info" (click)="onPick(task.taskId)">Pick</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="noData">No Data</div>

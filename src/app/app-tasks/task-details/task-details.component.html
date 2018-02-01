@@ -1,0 +1,26 @@
+<a [routerLink]="['/tasks/mybin']"><- Back To My Bin</a>
+
+<div class="table-responsive"> 
+        <ngx-loading [show]="showProgress"></ngx-loading> 
+    <table class="table table-bordered table-hover">
+        <thead> 
+            <tr> 
+                <th>CUSTOMER_ID</th>
+                <th>ORDER_ID</th>
+                <th>ORDER_ACTION_ID</th>
+                <th>STATE_ID</th>
+                <th>UPDATE_TIME</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let taskDetail of taskDetailsData">
+                <td>{{ taskDetail.customerId }}</td>
+                <td>{{ taskDetail.orderId }}</td>
+                <td>{{ taskDetail.orderActionId }}</td>
+                <td>{{ taskDetail.stateId }}</td>
+                <td>{{ taskDetail.datetime }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="noData">No Data</div>

@@ -1,4 +1,5 @@
 <div class="table-responsive">  
+    <ngx-loading [show]="showProgress"></ngx-loading>
     <table class="table table-bordered table-hover">
       <thead> 
         <tr> 
@@ -7,6 +8,7 @@
           <th>Severity</th>
           <th>Status</th>
           <th>Username</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -16,7 +18,9 @@
           <td>{{ task.severityName }}</td>
           <td>{{ task.status }}</td>
           <td>{{ task.firstname }}</td>
+          <td><a class="btn btn-info" (click)="onNotes(task.taskId)">Notes</a></td>
         </tr>
       </tbody>
     </table>
   </div>
+  <div *ngIf="noData">No Data</div>

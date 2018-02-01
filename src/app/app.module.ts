@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { MatDialogModule, MatDialog } from '@angular/material';
+import { LoadingModule, ANIMATION_TYPES } from 'ngx-loading';
 
 import { AppRouterModule } from './app-router/app-router.module';
 import { AppTasksModule } from './app-tasks/app-tasks.module';
@@ -16,23 +19,40 @@ import { AppComponent } from './app.component';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { SigninComponent } from './app-authentication/signin/signin.component';
 import { SignupComponent } from './app-authentication/signup/signup.component';
+import { ModalComponent } from './utils/modal/modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppHeaderComponent,
     SigninComponent,
-    SignupComponent
+    SignupComponent,
+    ModalComponent
+  ],
+  entryComponents: [
+    ModalComponent
   ],
   imports: [
     BrowserModule,
+    // BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    // MatDialogModule,
+    LoadingModule.forRoot({
+        animationType: ANIMATION_TYPES.threeBounce,
+        backdropBackgroundColour: 'rgba(0, 0, 0, 0.05)', 
+        backdropBorderRadius: '10px',
+        primaryColour: '#ffffff', 
+        secondaryColour: '#ffffff', 
+        tertiaryColour: '#ffffff'
+    }),
     AppRouterModule,
     AppTasksModule,
     AppAdminModule
   ],
-  providers: [ UserService, TaskService, AuthenticationService, EnvService ],
+  providers: [ 
+    //   MatDialog , 
+      UserService, TaskService, AuthenticationService, EnvService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

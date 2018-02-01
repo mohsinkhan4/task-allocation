@@ -1,0 +1,34 @@
+<!-- <a [routerLink]="['/tasks/mybin']"><- Back To My Bin</a> -->
+<a style="cursor: pointer;" (click)="onBack()">Back</a>
+
+<h4>Notes</h4>
+<ngx-loading [show]="showProgress"></ngx-loading> 
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="list-group">
+            <li 
+                class="list-group-item"
+                *ngFor="let taskNote of taskNotesData">
+                <div class="row">
+                    <div class="col-xs-2">{{ taskNote.datetime }}</div>
+                    <div class="col-xs-2">{{ taskNote.username }}</div>
+                    <div class="col-xs-8">{{ taskNote.note }}</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <form (ngSubmit)="onAddNote(f)" #f="ngForm">
+        <div class="col-md-11 col-xs-10">
+            <div class="form-group">
+                <label for="newNote"></label>
+                <textarea rows="3" id="newNote" name="newNote" class="form-control" ngModel ></textarea>
+            </div>
+        </div>
+        <div class="col-md-1 col-xs-2">
+            <div class="form-group">
+                <!-- <label for="add"></label> -->
+                <button class="btn btn-primary" style="margin-top: 20px;" name="add" type="submit">Add</button>
+            </div>
+        </div>
+    </form>
+</div>
