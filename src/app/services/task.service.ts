@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { Http, Response } from "@angular/http";
 
 import { EnvService } from "./env.service";
@@ -6,52 +6,107 @@ import { EnvService } from "./env.service";
 @Injectable()
 export class TaskService {
 
+    private STATUS_status = {
+        'NEW': 'new',
+        'PENDING_ON_OPS': 'ops',
+        // 'ASSIGNED':'asg',
+        'PENDING_INTERNAL_VALIDATION': 'int',
+        'PENDING_EXTERNAL_VALIDATION': 'ext',
+        'BUSINESS_VALIDATION_DONE': 'bvd',
+        'LIVE_IN_PRODUCTION': 'cmp'
+    };
+
+    private status_STATUS = {
+        'new': 'NEW',
+        'ops': 'PENDING_ON_OPS',
+        // 'asg': 'ASSIGNED',
+        'int': 'PENDING_INTERNAL_VALIDATION',
+        'ext': 'PENDING_EXTERNAL_VALIDATION',
+        'bvd': 'BUSINESS_VALIDATION_DONE',
+        'cmp': 'LIVE_IN_PRODUCTION'
+    };
+
     private taskData: any[];
+    public getStatsEventEmitter = new EventEmitter<boolean>();
 
     constructor(private http: Http, private envService: EnvService) {}
 
+    getTask(taskId) {
+        const { HOST, PORT } = this.envService.getConnectionDetails();
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/taskbyid?taskId=' + taskId); 
+    }
+    
     getAvailableTasks(userData) {
         const { HOST, PORT } = this.envService.getConnectionDetails();
-        return this.http.get('http://' + HOST + ':' + PORT + '/rest/tasks/available/' + userData.userId);            
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/availabletasks/data?username=' + userData.username);            
     }
     
     getMyBinTasks(userData) {
         const { HOST, PORT } = this.envService.getConnectionDetails();
-        return this.http.get('http://' + HOST + ':' + PORT + '/rest/tasks/mybin/' + userData.userId);  
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/mybintasks/data?username=' + userData.username);  
     }
 
     getAssignedTasks() {
         const { HOST, PORT } = this.envService.getConnectionDetails();
-        return this.http.get('http://' + HOST + ':' + PORT + '/rest/tasks/assigned');  
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/assignedtasks');  
     }
 
     getCompletedTasks() {
         const { HOST, PORT } = this.envService.getConnectionDetails();
-        return this.http.get('http://' + HOST + ':' + PORT + '/rest/tasks/completed'); 
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/completedtasks'); 
     }
     
-    updateTask(id, taskData) {
+    getTaskDetails(taskId) {
         const { HOST, PORT } = this.envService.getConnectionDetails();
-        return this.http.put('http://' + HOST + ':' + PORT + '/rest/tasks/' + id, taskData);
-    }
-    
-    getTaskDetails(id) {
-        const { HOST, PORT } = this.envService.getConnectionDetails();
-        return [{
-            'ban': '1234',
-            'serviceName': 'Serv1',
-            'state_id': 'COMPLETE',
-            'state_message': 'Good Message'
-        }, {
-            'ban': '1234',
-            'servicename': 'Serv2',
-            'state_id': 'COMPLETE',
-            'state_message': 'Good Message'
-        }];
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/taskDetails/data?taskId=' + taskId);
     }
 
-    getTask(taskData, id) {
-        return taskData.find(task => task.taskId === id)
+    getStats() {
+        const { HOST, PORT } = this.envService.getConnectionDetails();
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/stats');
+    }
+
+    refreshStats(e) {
+        this.getStatsEventEmitter.emit(e);
+    }
+
+    getTaskNotes(taskId) {
+        const { HOST, PORT } = this.envService.getConnectionDetails();
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.get(url + '/ReleaseDeployment/rest/tasks/notes/data?taskId=' + taskId);
+    }
+
+    addTaskNote(taskId, note, username, datetime) {
+        const { HOST, PORT } = this.envService.getConnectionDetails();
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        return this.http.post(url + '/ReleaseDeployment/rest/tasks/addnote', {
+            taskId,
+            note,
+            username,
+            datetime
+        });
+    }
+
+    updateTask(id, taskData) {
+        const { HOST, PORT } = this.envService.getConnectionDetails();
+        const url = (HOST && PORT) ? 'http://' + HOST + ':' + PORT : '';
+        const payload = Object.assign({}, taskData, { taskId: +id });
+        return this.http.post(url + '/ReleaseDeployment/rest/tasks/updatetask', payload);
+    }
+
+    fromSTATUSTostatus(STATUS) {
+        return this.STATUS_status[STATUS];
+    }
+
+    fromstatusToSTATUS(status) {
+        return this.status_STATUS[status];
     }
 
     // ********************************************************************************************************************************************

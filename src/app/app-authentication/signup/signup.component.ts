@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class SignupComponent implements OnInit {
 
   signedUp;
+  showProgress = false;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
@@ -21,12 +22,16 @@ export class SignupComponent implements OnInit {
 
   onSignup(form: NgForm) {
     const { firstname, lastname, email, username, password } = form.value;
+
+    this.showProgress = true;
     const loggedIn = this.authenticationService.signup(firstname, lastname, email, username, password)
-    .subscribe((resp: Response) => {
-      this.signedUp = resp.json();
-      console.log(this.signedUp);
-      if(this.signedUp) this.router.navigate(['/signin']);
-    });
+        .subscribe((resp: Response) => {
+            this.showProgress = false;
+        this.signedUp = resp.json();
+        if(this.signedUp) this.router.navigate(['/signin']);
+        }, (err) => {
+            this.showProgress = false;
+        });
   }
 
   onSignIn() {
